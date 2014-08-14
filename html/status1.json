@@ -1,0 +1,6 @@
+{
+    'braiders': { 'operators': [ 'trini','luque' ]  },
+    'bunching': { 'operators': [ 'luis'] } , 
+    'extruding': {'operators': [ 'pere']}, 
+    'deliveries': {'operators': [ 'carmelo']}  
+} 
