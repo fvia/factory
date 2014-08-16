@@ -12,11 +12,12 @@ var info = {
 for(var propt in info){
     cnv = document.getElementById(propt);
     ctx = cnv.getContext("2d");
+    //ctx.setTransform(1,0,0,1,0,0);
     ctx.font = "bold 12px sans-serif";
     ctx.fillText(info[propt]['title'],0,10);
     ctx.fillText( info[propt]['operators'] ,0,30);
     
     ctx.fillRect(50, 50, 100, 100)
 
-    alert(propt + ': ' + info[propt]);
+    //alert(propt + ': ' + info[propt]);
 }
