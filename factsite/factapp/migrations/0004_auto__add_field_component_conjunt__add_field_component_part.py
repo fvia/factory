@@ -8,13 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Component.conjunt'
+        db.add_column('factapp_component', 'conjunt',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['factapp.Article'], related_name='conjunt', default='X'),
+                      keep_default=False)
+
         # Adding field 'Component.part'
         db.add_column('factapp_component', 'part',
-                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='part', to=orm['factapp.Article'], default=''),
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['factapp.Article'], related_name='part', default='X'),
                       keep_default=False)
 
 
     def backwards(self, orm):
+        # Deleting field 'Component.conjunt'
+        db.delete_column('factapp_component', 'conjunt_id')
+
         # Deleting field 'Component.part'
         db.delete_column('factapp_component', 'part_id')
 
@@ -22,26 +30,26 @@ class Migration(SchemaMigration):
     models = {
         'factapp.article': {
             'Meta': {'object_name': 'Article'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '20', 'primary_key': 'True'}),
+            'code': ('django.db.models.fields.CharField', [], {'primary_key': 'True', 'max_length': '20'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'process': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['factapp.Process']"})
         },
         'factapp.component': {
             'Meta': {'object_name': 'Component'},
-            'article': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['factapp.Article']"}),
+            'conjunt': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['factapp.Article']", 'related_name': "'conjunt'"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'part': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'part'", 'to': "orm['factapp.Article']"}),
+            'part': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['factapp.Article']", 'related_name': "'part'"}),
             'quantity': ('django.db.models.fields.FloatField', [], {})
         },
         'factapp.machine': {
             'Meta': {'object_name': 'Machine'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '20', 'primary_key': 'True'}),
+            'code': ('django.db.models.fields.CharField', [], {'primary_key': 'True', 'max_length': '20'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'process': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['factapp.Process']"})
         },
         'factapp.process': {
             'Meta': {'object_name': 'Process'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '2', 'primary_key': 'True'}),
+            'code': ('django.db.models.fields.CharField', [], {'primary_key': 'True', 'max_length': '2'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         }
     }
