@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas 2</title>
+    <meta charset="utf-8"/>
+    <style>
+        canvas {
+            //background-color:lightsalmon;
+            border: 10px ridge olive;
+        }
+    </style>
+    
+<head/>
+<body>
+
+<canvas id="theCanvas"  height=400px width=800px ></canvas>
+
+</body>
+
+<script>
+    'use strict';
+    //https://developer.mozilla.org/en-US/docs/Web/HTML/Canvas/Drawing_graphics_with_canvas
+    
+    // Returns a random integer between min (included) and max (excluded)
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    
+    function Ball(x,y){
+        this.x = x;
+        this.y = y;
+        this.dx = 0;
+        this.dy = 0;
+    };
+    
+    Ball.prototype.move = function(){
+        this.x =  this.x + getRandomInt(-4, 5);
+        this.y =  this.y + getRandomInt(-4, 5);              
+    };
+    
+    Ball.prototype.moved = function(){
+        this.dx =  this.dx + getRandomInt(-3, 4);
+        this.dy =  this.dy + getRandomInt(-3, 4);
+        this.x += this.dx;
+        this.y += this.dy;              
+    };
+
+    
+    Ball.prototype.draw = function(ctx){
+        circle(ctx,this.x,this.y,12);
+    };
+    
+    function cross( ctx, x,y){
+        ctx.beginPath();
+        ctx.moveTo(x-10,y);
+        ctx.lineTo(x+10, y);
+        ctx.moveTo(x,y-10);
+        ctx.lineTo(x,y+10);
+        ctx.stroke();
+        ctx.fillText( "("+x+","+y+")" ,x,y)
+        
+    } 
+    
+    function circle(ctx,x,y,r){
+          ctx.beginPath();
+          ctx.arc(x,y,r,0,2*Math.PI );
+          ctx.fill();
+          ctx.stroke();
+    }
+    
+    function grid(cnv,ctx ){
+        ctx.save();
+        ctx.strokeStyle = "grey";
+        ctx.beginPath();  
+        
+        // verticals
+        for( var x = 10 ; x < cnv.width; x+= 10 ){
+            ctx.moveTo(x,0);
+            ctx.lineTo(x,cnv.height);
+        }
+        // horizontals
+        for( var y = 10 ; y < cnv.height; y+= 10 ){
+            ctx.moveTo(0,y);
+            ctx.lineTo(cnv.width,y);
+        }
+          
+        ctx.stroke();
+        ctx.restore();
+    }
+    
+    function step(timestamp){
+        step_number++;
+        
+        //context.clearRect ( x , y , w , h );
+        //canvas.width = canvas.width;
+        context.clearRect ( 0 , 0 , 200 , 200 );
+        
+        var d = new Date();
+        console.log(d.getSeconds() + " " +  d.getMilliseconds() );
+        console.log(timestamp);
+        console.log(step_number);
+        
+        circle(context, 100+step_number,120,4 );
+        circle(context, 100+step_number,170,4 );
+        circle(context, 100+step_number,220,4 );
+        circle(context, 100+step_number,420,4 );
+
+        
+        ball1.moved();
+        ball1.draw(context);        
+
+        for (var i =0 ; i < balls.length ; ++i) {
+             balls[i].moved(context );
+             balls[i].draw(context );
+        }
+        if(step_number < 500)    requestAnimationFrame(step);
+    }
+    
+    var canvas = document.getElementById('theCanvas');
+    var context = canvas.getContext('2d');
+
+    context.beginPath();
+    
+    context.strokeStyle = "red";
+    context.fillStyle = "blue";
+    context.moveTo(100, 150);
+    context.lineTo(450, 50);
+    context.stroke();
+    cross(context, 10,10);
+    
+    cross(context, 30,50);
+    
+    grid(canvas,context);
+    
+    cross(context, 100,100);
+    circle( context,100,120,4 );
+    context.stroke();
+    
+    var ball1 = new Ball(200,200);
+    var balls =[];
+    for(var i =0; i< 10;++i) balls.push(new Ball(300,100 ));
+    
+    var step_number = 0;
+    requestAnimationFrame(step);
+    
+</script>    
+</html>
+
