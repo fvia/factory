@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas 3</title>
+    <meta charset="utf-8"/>
+    <style>
+        canvas {
+            //background-color:lightsalmon;
+            border: 3px ridge olive;
+        }
+    </style>
+    
+<head/>
+<body>
+
+<canvas id="theCanvas"  height=400px width=800px ></canvas>
+
+</body>
+
+<script>
+    'use strict';
+    //https://developer.mozilla.org/en-US/docs/Web/HTML/Canvas/Drawing_graphics_with_canvas
+    
+    // Returns a random integer between min (included) and max (excluded)
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+    
+    // x,y es el punt on toca a terra, r radio
+    // text suposem es curt 3 o 4 chars 
+    function Bobina(x,y,r,text ){
+        this.x = x;
+        this.y = y;
+        this.r = r;  // radius
+        this.text = text;
+        this.a = 0;  //rad
+    };
+
+    Bobina.prototype.move = function(){
+        this.x += this.r/4;
+        this.a += 1 /4 ;  //2*Math.PI
+      
+    };
+    
+    Bobina.prototype.draw = function(ctx){
+        ctx.save();
+        circle( ctx,this.x,this.y + this.r,this.r);
+        ctx.strokeStyle = "grey";
+        ctx.fillStyle = "black";
+        ctx.translate(this.x,this.y +this.r);
+        ctx.rotate(this.a);
+        ctx.font = "bold 12px sans-serif";
+        ctx.fillText( this.text ,-11  ,7);
+        ctx.restore();
+    }
+    
+    
+    function Men4(x,y){
+      // un homenet de un 40 px de alcada
+      this.x = x;
+      this.y = y;
+      this.pos = 0; // 4 posicions
+      
+      this.punts = { 
+          genoll: {l: {}, r: {}},
+          peu: {l: {}, r: {}},
+          ma: {l: {}, r: {}},
+          coll: {},
+          cadera: {},
+          cap: {},
+          
+      };
+      
+      this.punts['genoll']['r']['x'] = [-2,0,2,0];
+      this.punts['genoll']['r']['y'] = [-9,-14,-9,-14];
+      this.punts['genoll']['l']['x'] = [2,0,-2,0];
+      this.punts['genoll']['l']['y'] = [-14,-9,-14,-9];
+      this.punts['peu']['r']['x'] = [-5,0,5,0];
+      this.punts['peu']['r']['y'] = [-1,-2,0,-2];
+      this.punts['peu']['l']['x'] = [5,0,-5,0];
+      this.punts['peu']['l']['y'] = [-2,-1,-2,0];
+      this.punts['coll']['x'] = [1,2,1,1];
+      this.punts['coll']['y'] = [-36,-36,-36,-36];
+      this.punts['cadera']['x'] = [0,0,0,0];
+      this.punts['cadera']['y'] = [-20,-18,-20,-18];
+      this.punts['cap']['x'] = [1,2,1,0];
+      this.punts['cap']['y'] = [-40,-40,-40,-40];
+      this.punts['ma']['r']['x'] = [-5,0,5,0];
+      this.punts['ma']['r']['y'] = [-22,-20,-22,-22];
+      this.punts['ma']['l']['x'] = [5,0,-5,0];
+      this.punts['ma']['l']['y'] = [-20,-22,-20,-22];
+
+      
+    }
+    Men4.prototype.move = function(){
+        this.x =  this.x + 2;
+        this.pos++;
+        if (this.pos > 3) this.pos = 0; 
+    };
+    
+    Men4.prototype.draw = function(ctx){
+        
+        ctx.beginPath();
+        //cos
+        //ctx.moveTo(this.x + this.punts['cadera']['x'][this.pas] ,this.y +  this.punts['cadera']['y'][this.pas]); //cadera
+        ctx.moveTo(this.x + this.punts['cadera']['x'][this.pos] ,this.y +  this.punts['cadera']['y'][this.pos]); //cadera
+        ctx.lineTo(this.x + this.punts['coll']['x'][this.pos] ,this.y +  this.punts['coll']['y'][this.pos]); //coll
+        ctx.moveTo(this.x + this.punts['cadera']['x'][this.pos] ,this.y +  this.punts['cadera']['y'][this.pos]); //cadera
+        ctx.lineTo(this.x + this.punts['genoll']['r']['x'][this.pos] ,this.y +  this.punts['genoll']['r']['y'][this.pos]); //genoll dret
+        ctx.lineTo(this.x + this.punts['peu']['r']['x'][this.pos] ,this.y +  this.punts['peu']['r']['y'][this.pos]); //peu dret
+        ctx.moveTo(this.x + this.punts['cadera']['x'][this.pos] ,this.y +  this.punts['cadera']['y'][this.pos]); //cadera
+        ctx.lineTo(this.x + this.punts['genoll']['l']['x'][this.pos] ,this.y +  this.punts['genoll']['l']['y'][this.pos]); //genoll esq
+        ctx.lineTo(this.x + this.punts['peu']['l']['x'][this.pos] ,this.y +  this.punts['peu']['l']['y'][this.pos]); //peu esq
+        
+        ctx.moveTo(this.x + this.punts['coll']['x'][this.pos] ,this.y +  this.punts['coll']['y'][this.pos]); //coll
+        ctx.lineTo(this.x + this.punts['ma']['r']['x'][this.pos] ,this.y +  this.punts['ma']['r']['y'][this.pos]); //ma dret
+        ctx.moveTo(this.x + this.punts['coll']['x'][this.pos] ,this.y +  this.punts['coll']['y'][this.pos]); //coll
+        ctx.lineTo(this.x + this.punts['ma']['l']['x'][this.pos] ,this.y +  this.punts['ma']['l']['y'][this.pos]); //ma esq
+        
+        ctx.stroke();
+        circle(ctx, this.x + this.punts['cap']['x'][this.pos],this.y + this.punts['cap']['y'][this.pos] ,3);
+    };
+
+    
+    
+    function circle(ctx,x,y,r){
+          ctx.beginPath();
+          ctx.arc(x,y,r,0,2*Math.PI );
+          ctx.fill();
+          ctx.stroke();
+    }
+    
+    function grid(cnv,ctx ){
+        ctx.save();
+        ctx.strokeStyle = "grey";
+        ctx.beginPath();  
+        
+        // verticals
+        for( var x = 10 ; x < cnv.width; x+= 10 ){
+            ctx.moveTo(x,0);
+            ctx.lineTo(x,cnv.height);
+        }
+        // horizontals
+        for( var y = 10 ; y < cnv.height; y+= 10 ){
+            ctx.moveTo(0,y);
+            ctx.lineTo(cnv.width,y);
+        }
+          
+        ctx.stroke();
+        ctx.restore();
+    }
+    
+    function step(timestamp){
+        step_number++;
+        
+        //context.clearRect ( x , y , w , h );
+        //canvas.width = canvas.width;
+        context.clearRect ( 0 , 0 , 600 , 400 );
+        
+        //var d = new Date();
+        //console.log(d.getSeconds() + " " +  d.getMilliseconds() );
+        //console.log(timestamp);
+        //console.log(step_number);
+        
+        if( step_number % 10 === 0){
+            men1.move();
+            men2.move();    
+            bob.move();
+        }
+        
+        men1.draw(context);
+        men2.draw(context);
+        bob.draw(context);           
+        if(step_number < 500)    requestAnimationFrame(step);
+    }
+    
+    var canvas = document.getElementById('theCanvas');
+    var context = canvas.getContext('2d');
+
+    context.beginPath();
+    
+    context.strokeStyle = "red";
+    context.fillStyle = "blue";
+    context.moveTo(100, 150);
+    context.lineTo(450, 50);
+    context.stroke();
+    
+    grid(canvas,context);
+    
+    circle( context,100,120,4 );
+    context.stroke();
+    
+    
+    var men1 = new Men4(200,100);
+    var men2 = new Men4(200,200);
+    men2.pos =1;
+    
+    var bob = new Bobina(200,250,20,"B52");
+    var step_number = 0;
+    requestAnimationFrame(step);
+    
+</script>    
+</html>
+

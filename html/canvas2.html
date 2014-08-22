@@ -26,6 +26,41 @@
         return Math.floor(Math.random() * (max - min)) + min;
     }
     
+    function Men4(x,y){
+      // un homenet de un 40 px de alcada
+      this.x = x;
+      this.y = y;
+      this.pos = 0; // 4 posicions
+      this.genoll_d_x = [-2,0,2,0];
+      this.genoll_d_y = [9,9,9,9];
+      this.genoll_e_x = [2,0,-2,0];
+      this.genoll_e_y = [9,9,9,9];
+      this.peu_d_x = [-5,0,5,0];
+      this.peu_d_y = [0,0,0,0];
+      this.peu_e_x = [5,0,-5,0];
+      this.peu_e_y = [0,0,0,0];
+      this.coll_x = [0,0,0,0];
+      this.coll_y = [36,36,36,36];
+      this.cadera_x = [0,0,0,0];
+      this.cadera_y = [18,18,18,18];
+    }
+    Men4.prototype.move = function(){
+        this.x =  this.x + 1;
+        this.pos++;
+        if (this.pos > 3) this.pos = 0; 
+    };
+    
+    Men4.prototype.draw = function(ctx){
+        
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x-10,this.y);
+        ctx.lineTo(this.x+10, this.y);
+        ctx.stroke();
+        circle(ctx,this.x,this.y,3);
+    };
+
+    
     function Ball(x,y){
         this.x = x;
         this.y = y;
@@ -39,8 +74,8 @@
     };
     
     Ball.prototype.moved = function(){
-        this.dx =  this.dx + getRandomInt(-3, 4);
-        this.dy =  this.dy + getRandomInt(-3, 4);
+        this.dx =  this.dx + getRandomInt(-1, 2);
+        this.dy =  this.dy + getRandomInt(-1, 2);
         this.x += this.dx;
         this.y += this.dy;              
     };
@@ -93,12 +128,12 @@
         
         //context.clearRect ( x , y , w , h );
         //canvas.width = canvas.width;
-        context.clearRect ( 0 , 0 , 200 , 200 );
+        context.clearRect ( 0 , 0 , 600 , 400 );
         
-        var d = new Date();
-        console.log(d.getSeconds() + " " +  d.getMilliseconds() );
-        console.log(timestamp);
-        console.log(step_number);
+        //var d = new Date();
+        //console.log(d.getSeconds() + " " +  d.getMilliseconds() );
+        //console.log(timestamp);
+        //console.log(step_number);
         
         circle(context, 100+step_number,120,4 );
         circle(context, 100+step_number,170,4 );
@@ -107,8 +142,11 @@
 
         
         ball1.moved();
-        ball1.draw(context);        
-
+        ball1.draw(context);    
+        
+        men1.move();    
+        men1.draw(context);
+        
         for (var i =0 ; i < balls.length ; ++i) {
              balls[i].moved(context );
              balls[i].draw(context );
@@ -140,6 +178,7 @@
     var balls =[];
     for(var i =0; i< 10;++i) balls.push(new Ball(300,100 ));
     
+    var men1 = new Men4(200,100);
     var step_number = 0;
     requestAnimationFrame(step);
     
