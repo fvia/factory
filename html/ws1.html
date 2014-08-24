@@ -4,7 +4,7 @@
     <meta charset="utf-8" />  
     <title>WebSocket Test</title>  
 <script>  
-    var wsUri = "ws://echo.websocket.org/";
+    //var wsUri = "ws://echo.websocket.org/";
     var wsUri = "ws://127.0.0.1:9000/ws"; 
     var output;  
         
@@ -32,8 +32,6 @@
     function onOpen(evt) 
     { 
         writeToScreen("CONNECTED");
-        doSend("Trucam aviat!");
-        doSend("WebSocket rocks"); 
     }  
         
     function onClose(evt) 
