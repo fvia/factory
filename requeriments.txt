@@ -3,3 +3,8 @@ Django==1.6.5
 South==1.0
 psycopg2==2.5.3
 ws4py==0.3.4
+#-e git://git.myproject.org/MyProject.git@master#egg=MyProject
+#-e git://git.myproject.org/MyProject.git@v1.0#egg=MyProject
+#-e git://git.myproject.org/MyProject.git@da39a3ee5e6b4b0d3255bfef95601890afd80709#egg=MyProject
+# action needed for pika3 (is not pika) 
+
