@@ -3,9 +3,39 @@
 import readline
 
 class World:
-   def __init__(self):
-        pass   
+    def __init__(self):
+       # includes items and actors
+       self.items = []
+       # indexed on name
+       self.actors = {}     
  
+    def append(self,item):
+        """
+        """
+        self.items.append(item)
+        if hasattr(item,"pick"):  # it's an actor
+            self.actors[item.name]=item
+   
+    def getActorByName(self, name ):
+        """ returns the actor or None
+        """  
+        return self.actors.get(name,None)
+
+    def getItemByPos(self,x,y):
+        """ returns the item or None
+        """   
+        itemIter = filter( lambda K: K.x == x and K.y == y  , self.items )
+        return  next( itemIter, None  )        
+         
+    
+    def step(self):
+        for i in self.items:
+            i.step()
+     
+    def print(self):
+        for i in self.items:
+            print(i,end='\t')        
+        print ("----") 
 
 class Employee:
    def __init__(self,x,y,id,name):
@@ -39,7 +69,8 @@ class Employee:
             return
 
    def pick(self,x,y ):
-       pass
+       if abs( x - self.x ) > 1  or  abs( y - self.y ) > 1 :
+           print("No llego") 
    
    def drop(self,x,y):
        pass    
@@ -67,24 +98,24 @@ class Coil:
 #####################################
 if __name__ == '__main__':
 
-    TheItems= [] 
+    world = World() 
 
 
     luque =  Employee(10,10,101,"luque" )
     luque.goto(12,12)
-    TheItems.append(luque)
+    world.append(luque)
 
     paco =  Employee(10,12,101,"paco" )
     paco.goto(15,15)
-    TheItems.append(paco)
+    world.append(paco)
 
     b52 = Coil(20,10,552, "B52" )
-    TheItems.append(b52)
+    world.append(b52)
 
     for x in range(1000):
-        for i in TheItems:
-            i.step()
-            print(i) 
+        world.step()
+        world.print()
+        
         str_command = input("step {}:".format(x))
         if str_command == 'quit':
             break   
@@ -92,9 +123,10 @@ if __name__ == '__main__':
         quien, que, x, y, resta  =  str_command.split(" ",4)
         print("quien:{}  que:{} x:{} y:{}".format(quien,que,x,y))
         # TODO  clear \n from input        
-        quienIter = filter( lambda K: K.name == quien  , TheItems )
-        objQuien = next( quienIter, None  )        
-        print("objQuien", objQuien )
+        ###quienIter = filter( lambda K: K.name == quien  , TheItems )
+        ###objQuien = next( quienIter, None  )        
+        ###print("objQuien", objQuien )
+        objQuien = world.getActorByName(quien )
         if objQuien:
             if que in ["pick", "drop", "goto"]:
                 getattr(objQuien,que)(int(x),int(y))
