@@ -174,8 +174,15 @@
         if(step_number < 500)    requestAnimationFrame(step);
     }
     
+    function mouseDown(e){
+        console.log(e)        
+    }
+    
     var canvas = document.getElementById('theCanvas');
     var context = canvas.getContext('2d');
+      
+    canvas.addEventListener("mousedown", mouseDown, false);
+    
 
     context.beginPath();
     
